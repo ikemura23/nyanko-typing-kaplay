@@ -1,5 +1,10 @@
 import { BACKGROUND_COLOR } from "../common/backgroundColor.js";
 
+// 敵の移動速度
+const ENEMY_SPEED = 80;
+// 地面の高さ
+const GROUND_HEIGHT = 56;
+
 export function registerGameScene() {
     loadSprite("bean", "sprites/bean.png");
     loadCrew("sprite", "flowy");
@@ -10,6 +15,7 @@ export function registerGameScene() {
     loadCrew("sprite", "kaboom");
 
     scene("game", () => {
+
         const w = width();
         const h = height();
 
@@ -104,10 +110,11 @@ export function registerGameScene() {
             }
         });
 
+
         // 地面エリア
         add([
-            rect(width(), 56),
-            pos(0, height() - 56),
+            rect(width(), GROUND_HEIGHT),
+            pos(0, h - GROUND_HEIGHT),
             outline(4),
             area(),
             body({ isStatic: true }),
@@ -117,7 +124,7 @@ export function registerGameScene() {
         // 仮のキャラクター
         const player = add([
             sprite("bean"),
-            pos(80, h - 56),
+            pos(80, h - GROUND_HEIGHT),
             anchor("bot"),
             area(),
             body(),
@@ -131,9 +138,9 @@ export function registerGameScene() {
                 sprite(spriteName),
                 area(),
                 body({ isStatic: true }),
-                pos(width(), height() - 56),
+                pos(w, h - GROUND_HEIGHT),
                 anchor("botleft"),
-                move(LEFT, 80),
+                move(LEFT, ENEMY_SPEED),
                 "enemy",
             ]);
         }
