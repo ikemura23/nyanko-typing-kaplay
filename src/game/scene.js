@@ -38,8 +38,12 @@ export function registerGameScene() {
             timerText.text = String(elapsedTime);
         });
 
-        // タイピング用単語（仮で2文字 "KA"）
-        const targetWord = "KA";
+        // タイピング用単語リスト（10個・2文字ローマ字）
+        const words = [
+            "KA", "KI", "KU", "KE", "KO",
+            "SA", "SI", "SU", "SE", "SO",
+        ];
+        let currentWordIndex = 0;
         let typedLength = 0;
 
         // タイピング用単語ゾーン（画面上部中央: 黒塗り, 白枠, 角丸）
@@ -54,8 +58,8 @@ export function registerGameScene() {
         ]);
 
         // 単語テキスト（未入力=白, 入力済み正解=グレー）
-        add([
-            text(targetWord, {
+        const wordTextObj = add([
+            text(words[currentWordIndex], {
                 size: 32,
                 transform: (idx, ch) =>
                     idx < typedLength
@@ -67,10 +71,17 @@ export function registerGameScene() {
             color(255, 255, 255),
         ]);
 
-        // キー入力: 正解なら typedLength を進める
+        // キー入力: 正解なら typedLength を進める。1語完了で次の単語へ
         onCharInput((ch) => {
+            const targetWord = words[currentWordIndex];
             if (typedLength < targetWord.length && ch.toUpperCase() === targetWord[typedLength]) {
                 typedLength += 1;
+                if (typedLength === targetWord.length) {
+                    // 次の単語へ（10個なので0に戻す）
+                    currentWordIndex = (currentWordIndex + 1) % words.length;
+                    typedLength = 0;
+                    wordTextObj.text = words[currentWordIndex];
+                }
             }
         });
 
