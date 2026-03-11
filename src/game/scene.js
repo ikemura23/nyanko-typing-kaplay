@@ -14,7 +14,7 @@ export function registerGameScene() {
     loadCrew("sprite", "beantle");
     loadCrew("sprite", "kaboom");
 
-    scene("game", () => {
+    scene("game", ({ typingMode, typingModeId } = {}) => {
 
         const w = width();
         const h = height();
@@ -29,6 +29,12 @@ export function registerGameScene() {
             anchor("topleft"),
             color(BACKGROUND_COLOR),
         ]);
+
+        // タイピング用単語リスト（typingMode から生成）
+        const words = typingMode && typeof typingMode === "object"
+            ? Object.values(typingMode).flatMap((g) => g.keys || [])
+            : [];
+        const wordList = words.length > 0 ? words : [];
 
         // タイピングスコア(ゲーム中は非表示、成績画面で表示)
         let typingScore = 0;
@@ -51,10 +57,6 @@ export function registerGameScene() {
         });
 
         // タイピング用単語リスト（10個・2文字ローマ字）
-        const words = [
-            "KA", "KI", "KU", "KE", "KO",
-            "SA", "SI", "SU", "SE", "SO",
-        ];
         let currentWordIndex = 0;
         let typedLength = 0;
         let wordsCompleted = 0; // 完了した単語数（10で結果画面へ）
@@ -73,7 +75,7 @@ export function registerGameScene() {
 
         // 単語テキスト（未入力=白, 入力済み正解=グレー）
         const wordTextObj = add([
-            text(words[currentWordIndex], {
+            text(wordList[currentWordIndex], {
                 size: 76,
                 transform: (idx, ch) =>
                     idx < typedLength
@@ -87,7 +89,7 @@ export function registerGameScene() {
 
         // キー入力: 正解なら typedLength を進める。誤りなら打ち間違いカウント
         onCharInput((ch) => {
-            const targetWord = words[currentWordIndex];
+            const targetWord = wordList[currentWordIndex];
             if (typedLength >= targetWord.length) return;
             if (ch.toUpperCase() === targetWord[typedLength]) {
                 typedLength += 1;
@@ -101,9 +103,9 @@ export function registerGameScene() {
                     currentEnemy.destroy();
                     currentEnemy = spawnEnemy();
                     // 次の単語へ
-                    currentWordIndex = (currentWordIndex + 1) % words.length;
+                    currentWordIndex = (currentWordIndex + 1) % wordList.length;
                     typedLength = 0;
-                    wordTextObj.text = words[currentWordIndex];
+                    wordTextObj.text = wordList[currentWordIndex];
                 }
             } else {
                 typingMistakes += 1;
