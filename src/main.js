@@ -1,11 +1,11 @@
 import kaplay from "kaplay";
+import { registerMenuScene } from "./menu/menu_scene.js";
 // import "kaplay/global"; // uncomment if you want to use without the k. prefix
 
+// アセットを "./" 基準にすると Itch.io 等へデプロイしても正しく読める
 const k = kaplay();
+k.loadRoot("./");
 
-k.loadRoot("./"); // A good idea for Itch.io publishing later
-k.loadSprite("bean", "sprites/bean.png");
+registerMenuScene(k);
 
-k.add([k.pos(120, 80), k.sprite("bean")]);
-
-k.onClick(() => k.addKaboom(k.mousePos()));
+k.go("menu");
