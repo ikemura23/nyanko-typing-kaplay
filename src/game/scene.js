@@ -1,3 +1,5 @@
+import { BACKGROUND_COLOR } from "../common/backgroundColor.js";
+
 export function registerGameScene() {
     loadSprite("bean", "sprites/bean.png");
 
@@ -10,7 +12,7 @@ export function registerGameScene() {
             rect(w, h),
             pos(0, 0),
             anchor("topleft"),
-            color("#ACFEFF"),
+            color(BACKGROUND_COLOR),
         ]);
 
     });
