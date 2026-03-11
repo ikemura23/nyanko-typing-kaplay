@@ -45,6 +45,7 @@ export function registerGameScene() {
         ];
         let currentWordIndex = 0;
         let typedLength = 0;
+        let wordsCompleted = 0; // 完了した単語数（10で結果画面へ）
 
         // タイピング用単語ゾーン（画面上部中央: 黒塗り, 白枠, 角丸）
         const zoneWidth = 96;
@@ -77,10 +78,15 @@ export function registerGameScene() {
             if (typedLength < targetWord.length && ch.toUpperCase() === targetWord[typedLength]) {
                 typedLength += 1;
                 if (typedLength === targetWord.length) {
+                    wordsCompleted += 1;
+                    if (wordsCompleted >= 10) {
+                        go("result", { typingScore, elapsedTime });
+                        return;
+                    }
                     // 現在の敵を倒して次の敵を出現
                     currentEnemy.destroy();
                     currentEnemy = spawnEnemy();
-                    // 次の単語へ（10個なので0に戻す）
+                    // 次の単語へ
                     currentWordIndex = (currentWordIndex + 1) % words.length;
                     typedLength = 0;
                     wordTextObj.text = words[currentWordIndex];
