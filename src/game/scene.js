@@ -38,6 +38,42 @@ export function registerGameScene() {
             timerText.text = String(elapsedTime);
         });
 
+        // タイピング用単語（仮で2文字 "KA"）
+        const targetWord = "KA";
+        let typedLength = 0;
+
+        // タイピング用単語ゾーン（画面上部中央: 黒塗り, 白枠, 角丸）
+        const zoneWidth = 96;
+        const zoneHeight = 48;
+        add([
+            rect(zoneWidth, zoneHeight, { radius: 8 }),
+            pos(w / 2, 40),
+            anchor("center"),
+            color(0, 0, 0),
+            outline(2, rgb(255, 255, 255)),
+        ]);
+
+        // 単語テキスト（未入力=白, 入力済み正解=グレー）
+        add([
+            text(targetWord, {
+                size: 32,
+                transform: (idx, ch) =>
+                    idx < typedLength
+                        ? { color: rgb(128, 128, 128), override: true }
+                        : {},
+            }),
+            pos(w / 2, 40),
+            anchor("center"),
+            color(255, 255, 255),
+        ]);
+
+        // キー入力: 正解なら typedLength を進める
+        onCharInput((ch) => {
+            if (typedLength < targetWord.length && ch.toUpperCase() === targetWord[typedLength]) {
+                typedLength += 1;
+            }
+        });
+
         // 地面エリア
         add([
             rect(width(), 56),
@@ -66,7 +102,7 @@ export function registerGameScene() {
             pos(width(), height() - 56),
             anchor("botleft"),
             color(255, 180, 255),
-            move(LEFT, 800), // 移動速度
+            move(LEFT, 80), // 移動速度
             "enemy",
         ]);
 
