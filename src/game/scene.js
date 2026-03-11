@@ -7,6 +7,7 @@ export function registerGameScene() {
     loadCrew("sprite", "gigagantrum");
     loadCrew("sprite", "ghostiny");
     loadCrew("sprite", "beantle");
+    loadCrew("sprite", "kaboom");
 
     scene("game", () => {
         const w = width();
@@ -138,9 +139,19 @@ export function registerGameScene() {
         }
         let currentEnemy = spawnEnemy();
 
-        // 敵と接触したら1秒後に結果画面へ（スコア・経過時間・打ち間違いを渡す）
-        player.onCollide("enemy", () =>
-            wait(1, () => go("result", { typingScore, elapsedTime, typingMistakes }))
-        );
+        // 敵と接触したら間に kaboom を表示し、1秒後に結果画面へ
+        player.onCollide("enemy", (enemy) => {
+            const midX = (player.pos.x + enemy.pos.x) / 2;
+            const midY = ((player.pos.y + enemy.pos.y) / 2) - 100;
+            const kaboomObj = add([
+                sprite("kaboom"),
+                pos(midX, midY),
+                anchor("center"),
+            ]);
+            wait(1, () => {
+                kaboomObj.destroy();
+                go("result", { typingScore, elapsedTime, typingMistakes });
+            });
+        });
     });
 }
