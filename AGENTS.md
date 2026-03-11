@@ -20,6 +20,10 @@
 
 ## ディレクトリ構成
 - `src/` — ゲームのソースコード（エントリ: `main.js`）
+  - `src/common/` — 共通定数・共有モジュール
+  - `src/game/` — ゲームプレイシーン（本編のタイピング・敵処理など）
+  - `src/menu/` — メニュー／タイトルシーン（スタート画面）
+  - `src/result/` — リザルトシーン（スコア表示・リトライ等）
 - `dist/` — ビルド出力（index.html、JS バンドル、静的アセット）
 - `docs/` — 設計・計画ドキュメント（PLAN.md 等）
 - ルート — `package.json`、`vite.config.js`、`index.html` 等の設定・エントリ
