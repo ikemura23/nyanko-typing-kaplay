@@ -46,6 +46,7 @@ export function registerGameScene() {
         let currentWordIndex = 0;
         let typedLength = 0;
         let wordsCompleted = 0; // 完了した単語数（10で結果画面へ）
+        let typingMistakes = 0; // 打ち間違いの回数
 
         // タイピング用単語ゾーン（画面上部中央: 黒塗り, 白枠, 角丸）
         const zoneWidth = 220;
@@ -72,15 +73,16 @@ export function registerGameScene() {
             color(255, 255, 255),
         ]);
 
-        // キー入力: 正解なら typedLength を進める。1語完了で次の単語へ＆敵を次の1体に切り替え
+        // キー入力: 正解なら typedLength を進める。誤りなら打ち間違いカウント
         onCharInput((ch) => {
             const targetWord = words[currentWordIndex];
-            if (typedLength < targetWord.length && ch.toUpperCase() === targetWord[typedLength]) {
+            if (typedLength >= targetWord.length) return;
+            if (ch.toUpperCase() === targetWord[typedLength]) {
                 typedLength += 1;
                 if (typedLength === targetWord.length) {
                     wordsCompleted += 1;
                     if (wordsCompleted >= 10) {
-                        go("result", { typingScore, elapsedTime });
+                        go("result", { typingScore, elapsedTime, typingMistakes });
                         return;
                     }
                     // 現在の敵を倒して次の敵を出現
@@ -91,6 +93,8 @@ export function registerGameScene() {
                     typedLength = 0;
                     wordTextObj.text = words[currentWordIndex];
                 }
+            } else {
+                typingMistakes += 1;
             }
         });
 
@@ -129,9 +133,9 @@ export function registerGameScene() {
         }
         let currentEnemy = spawnEnemy();
 
-        // 敵と接触したら1秒後に結果画面へ（スコア・経過時間を渡す）
+        // 敵と接触したら1秒後に結果画面へ（スコア・経過時間・打ち間違いを渡す）
         player.onCollide("enemy", () =>
-            wait(1, () => go("result", { typingScore, elapsedTime }))
+            wait(1, () => go("result", { typingScore, elapsedTime, typingMistakes }))
         );
     });
 }
