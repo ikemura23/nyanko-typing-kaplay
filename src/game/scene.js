@@ -2,6 +2,11 @@ import { BACKGROUND_COLOR } from "../common/backgroundColor.js";
 
 export function registerGameScene() {
     loadSprite("bean", "sprites/bean.png");
+    loadCrew("sprite", "flowy");
+    loadCrew("sprite", "ghosty");
+    loadCrew("sprite", "gigagantrum");
+    loadCrew("sprite", "ghostiny");
+    loadCrew("sprite", "beantle");
 
     scene("game", () => {
         const w = width();
@@ -118,15 +123,15 @@ export function registerGameScene() {
         ]);
 
         // 敵を1体生成する（1単語完了ごとに呼んで切り替え）
+        const enemySprites = ["flowy", "ghosty", "gigagantrum", "ghostiny", "beantle"];
         function spawnEnemy() {
+            const spriteName = choose(enemySprites);
             return add([
-                rect(48, 64),
+                sprite(spriteName),
                 area(),
                 body({ isStatic: true }),
-                outline(4),
                 pos(width(), height() - 56),
                 anchor("botleft"),
-                color(255, 180, 255),
                 move(LEFT, 80),
                 "enemy",
             ]);
