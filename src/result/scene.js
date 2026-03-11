@@ -3,7 +3,7 @@
 import { BACKGROUND_COLOR } from "../common/backgroundColor.js";
 
 export function registerResultScene() {
-    scene("result", () => {
+    scene("result", ({ typingScore = 0, elapsedTime = 0 } = {}) => {
         const w = width();
         const h = height();
 
@@ -15,11 +15,17 @@ export function registerResultScene() {
             color(BACKGROUND_COLOR),
         ]);
 
-        // 仮UI: せいせき（画面中央・大フォント）
+        // 仮UI: せいせき（画面中央・大フォント）+ スコア・経過時間
         add([
             text("せいせき", { size: 80 }),
             color(0, 0, 0),
             pos(w / 2, 200),
+            anchor("center"),
+        ]);
+        add([
+            text(`スコア: ${typingScore}  時間: ${elapsedTime}秒`, { size: 28 }),
+            color(0, 0, 0),
+            pos(w / 2, 280),
             anchor("center"),
         ]);
 

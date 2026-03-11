@@ -66,11 +66,13 @@ export function registerGameScene() {
             pos(width(), height() - 56),
             anchor("botleft"),
             color(255, 180, 255),
-            move(LEFT, 80), // 移動速度
+            move(LEFT, 800), // 移動速度
             "enemy",
         ]);
 
-        // 敵と接触したら1秒後に結果画面へ
-        player.onCollide("enemy", () => wait(1, () => go("result")));
+        // 敵と接触したら1秒後に結果画面へ（スコア・経過時間を渡す）
+        player.onCollide("enemy", () =>
+            wait(1, () => go("result", { typingScore, elapsedTime }))
+        );
     });
 }
