@@ -14,6 +14,7 @@ export function registerGameScene() {
             anchor("topleft"),
             color(BACKGROUND_COLOR),
         ]);
-
+        
+        onKeyPress("space", () => go("result")); // デバッグ用なので後で削除
     });
 }
