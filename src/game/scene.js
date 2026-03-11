@@ -48,26 +48,26 @@ export function registerGameScene() {
         let wordsCompleted = 0; // 完了した単語数（10で結果画面へ）
 
         // タイピング用単語ゾーン（画面上部中央: 黒塗り, 白枠, 角丸）
-        const zoneWidth = 96;
-        const zoneHeight = 48;
+        const zoneWidth = 220;
+        const zoneHeight = 100;
         add([
-            rect(zoneWidth, zoneHeight, { radius: 8 }),
-            pos(w / 2, 40),
+            rect(zoneWidth, zoneHeight, { radius: 16 }),
+            pos(w / 2, 58),
             anchor("center"),
             color(0, 0, 0),
-            outline(2, rgb(255, 255, 255)),
+            outline(4, rgb(255, 255, 255)),
         ]);
 
         // 単語テキスト（未入力=白, 入力済み正解=グレー）
         const wordTextObj = add([
             text(words[currentWordIndex], {
-                size: 32,
+                size: 76,
                 transform: (idx, ch) =>
                     idx < typedLength
                         ? { color: rgb(128, 128, 128), override: true }
                         : {},
             }),
-            pos(w / 2, 40),
+            pos(w / 2, 58),
             anchor("center"),
             color(255, 255, 255),
         ]);
