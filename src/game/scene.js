@@ -50,6 +50,7 @@ export function registerGameScene() {
             "enemy",
         ]);
 
-        onKeyPress("space", () => go("result")); // デバッグ用なので後で削除
+        // 敵と接触したら1秒後に結果画面へ
+        player.onCollide("enemy", () => wait(1, () => go("result")));
     });
 }
