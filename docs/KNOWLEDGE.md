@@ -15,6 +15,12 @@
 
 ## Kaplay
 
+### グローバルモード（kaplay/global）で統一
+
+- **方針**: プロジェクトでは `import "kaplay/global"` を使い、Kaplay の API はグローバルに露出して使う（`k.` プレフィックスなし）。
+- **手順**: エントリで `kaplay()` を呼んで初期化すると、`loadRoot`・`go`・`add`・`scene` などがグローバルで使える。
+- **参照**: [KAPLAY Docs — Installation](https://kaplayjs.com/docs/guides/install/)（デフォルトで `global: true`）。
+
 ### text コンポーネント
 
 **リファレンス**: [TextCompOpt — KAPLAY Docs](https://kaplayjs.com/docs/api/TextCompOpt)
