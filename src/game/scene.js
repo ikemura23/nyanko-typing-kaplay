@@ -71,12 +71,15 @@ export function registerGameScene() {
             color(255, 255, 255),
         ]);
 
-        // キー入力: 正解なら typedLength を進める。1語完了で次の単語へ
+        // キー入力: 正解なら typedLength を進める。1語完了で次の単語へ＆敵を次の1体に切り替え
         onCharInput((ch) => {
             const targetWord = words[currentWordIndex];
             if (typedLength < targetWord.length && ch.toUpperCase() === targetWord[typedLength]) {
                 typedLength += 1;
                 if (typedLength === targetWord.length) {
+                    // 現在の敵を倒して次の敵を出現
+                    currentEnemy.destroy();
+                    currentEnemy = spawnEnemy();
                     // 次の単語へ（10個なので0に戻す）
                     currentWordIndex = (currentWordIndex + 1) % words.length;
                     typedLength = 0;
@@ -104,18 +107,21 @@ export function registerGameScene() {
             body(),
         ]);
 
-        // 仮の敵
-        add([
-            rect(48, 64),
-            area(),
-            body({isStatic: true}),
-            outline(4),
-            pos(width(), height() - 56),
-            anchor("botleft"),
-            color(255, 180, 255),
-            move(LEFT, 80), // 移動速度
-            "enemy",
-        ]);
+        // 敵を1体生成する（1単語完了ごとに呼んで切り替え）
+        function spawnEnemy() {
+            return add([
+                rect(48, 64),
+                area(),
+                body({ isStatic: true }),
+                outline(4),
+                pos(width(), height() - 56),
+                anchor("botleft"),
+                color(255, 180, 255),
+                move(LEFT, 80),
+                "enemy",
+            ]);
+        }
+        let currentEnemy = spawnEnemy();
 
         // 敵と接触したら1秒後に結果画面へ（スコア・経過時間を渡す）
         player.onCollide("enemy", () =>
