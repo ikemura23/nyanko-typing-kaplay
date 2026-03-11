@@ -19,8 +19,25 @@ export function registerResultScene() {
         add([
             text("せいせき", { size: 80 }),
             color(0, 0, 0),
-            pos(w / 2, h / 2),
+            pos(w / 2, 200),
             anchor("center"),
         ]);
+
+        // 操作用説明（画面中央下部）
+        add([
+            text("スペースキーでもう１回ゲームする", { size: 28 }),
+            color(0, 0, 0),
+            pos(w / 2, h - 180),
+            anchor("center"),
+        ]);
+        add([
+            text("エンターキーでメニューにもどる", { size: 28 }),
+            color(0, 0, 0),
+            pos(w / 2, h - 140),
+            anchor("center"),
+        ]);
+
+        onKeyPress("space", () => go("game"));
+        onKeyPress("enter", () => go("menu"));
     });
 }
