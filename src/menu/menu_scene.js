@@ -12,7 +12,7 @@ const TYPING_MODES = [
 
 export function registerMenuScene() {
     loadSprite("bean", "sprites/bean.png");
-    loadCrew("sprite", "arrow");
+    loadCrew("sprite", "arrow-o");
 
     scene("menu", () => {
         const w = width();
@@ -53,12 +53,23 @@ export function registerMenuScene() {
         let selectedIndex = 0;
         const modeOptionHeight = 48;
         const modeStartY = h / 2 - 24;
+        const zoneWidth = 320;
+        const zoneHeight = 168;
+        const labelMarginBottom = 16;
 
         add([
             text("タイピングモードを選んでください", { size: 28 }),
             color(0, 0, 0),
-            pos(w / 2, modeStartY - 52),
+            pos(w / 2, modeStartY - 52 - labelMarginBottom),
             anchor("center"),
+        ]);
+
+        add([
+            rect(zoneWidth, zoneHeight, { radius: 16 }),
+            pos(w / 2, modeStartY + modeOptionHeight),
+            anchor("center"),
+            color(0, 0, 0),
+            outline(4, rgb(255, 255, 255)),
         ]);
 
         function startGame() {
@@ -68,7 +79,7 @@ export function registerMenuScene() {
 
         const arrowOffsetX = 120; // メニュー文字の左側に表示する距離
         const arrowObj = add([
-            sprite("arrow"),
+            sprite("arrow-o"),
             pos(w / 2 - arrowOffsetX, modeStartY + selectedIndex * modeOptionHeight),
             anchor("center"),
         ]);
@@ -80,7 +91,7 @@ export function registerMenuScene() {
                 text(mode.label, { size: 36 }),
                 pos(w / 2, y),
                 anchor("center"),
-                color(0, 0, 0),
+                color(255, 255, 255),
                 area({ width: 280, height: 44 }),
                 "modeOption",
             ]);
