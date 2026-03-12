@@ -17,6 +17,11 @@
 - `npm run build` — 本番ビルド（出力: `dist/`）
 - `npm run preview` — ビルド結果のプレビュー
 - `npm run zip` — ビルド後に `dist/game.zip` を作成（itch.io 等用）
+- `npm run deploy` — ビルド後に Cloudflare Pages へデプロイ（`wrangler.toml` 使用）
+
+## デプロイ（Cloudflare Pages）
+- 初回のみ: `npx wrangler login` でログイン。必要なら `npx wrangler pages project create` でプロジェクト作成（または `npm run deploy` 実行時にプロジェクト名を聞かれて自動作成）。
+- 通常: `npm run deploy` で `dist/` を Cloudflare Pages にアップロード。
 
 ## ディレクトリ構成
 - `src/` — ゲームのソースコード（エントリ: `main.js`）
@@ -26,4 +31,4 @@
   - `src/result/` — リザルトシーン（スコア表示・リトライ等）
 - `dist/` — ビルド出力（index.html、JS バンドル、静的アセット）
 - `docs/` — 設計・計画ドキュメント（PLAN.md 等）
-- ルート — `package.json`、`vite.config.js`、`index.html` 等の設定・エントリ
+- ルート — `package.json`、`vite.config.js`、`wrangler.toml`、`index.html` 等の設定・エントリ

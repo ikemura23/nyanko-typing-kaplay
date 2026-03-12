@@ -1,0 +1,3 @@
+name = "nyanko-typing-kaplay"
+pages_build_output_dir = "./dist"
+compatibility_date = "2025-03-12"
