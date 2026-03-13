@@ -1,4 +1,5 @@
 import { BACKGROUND_COLOR } from "../common/backgroundColor.js";
+import { computeRoundsToComplete } from "../common/roundsToComplete.js";
 
 // 敵の移動速度
 const ENEMY_SPEED = 80;
@@ -35,6 +36,7 @@ export function registerGameScene() {
             ? Object.values(typingMode).flatMap((g) => g.keys || [])
             : [];
         const wordList = words.length > 0 ? words : [];
+        const gameCompleteEnemyCount = computeRoundsToComplete(wordList);
 
         // タイピングスコア(ゲーム中は非表示、成績画面で表示)
         let typingScore = 0;
@@ -95,7 +97,7 @@ export function registerGameScene() {
                 typedLength += 1;
                 if (typedLength === targetWord.length) {
                     wordsCompleted += 1;
-                    if (wordsCompleted >= 10) {
+                    if (wordsCompleted >= gameCompleteEnemyCount) {
                         go("result", { typingScore, elapsedTime, typingMistakes });
                         return;
                     }
