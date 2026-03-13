@@ -1,5 +1,6 @@
 ## プロジェクト概要
 - にゃんこタイピング風のタイピングゲーム。敵を倒すタワーデフェンス風 UI で、子ども向けにローマ字・キー入力の土台を提供する。
+- ドメイン用語・概念の定義は **docs/DOMAIN.md** を参照する。
 
 ## 技術スタック
 - **ゲームエンジン**: [Kaplay](https://kaplayjs.com/) — ゲームロジック・シーン・スプライト・入力はすべて Kaplay の API に準拠する
@@ -30,5 +31,5 @@
   - `src/menu/` — メニュー／タイトルシーン（スタート画面）
   - `src/result/` — リザルトシーン（スコア表示・リトライ等）
 - `dist/` — ビルド出力（index.html、JS バンドル、静的アセット）
-- `docs/` — 設計・計画ドキュメント（PLAN.md 等）
+- `docs/` — 設計・計画ドキュメント（PLAN.md、DOMAIN.md 等）。ドメイン用語は DOMAIN.md。
 - ルート — `package.json`、`vite.config.js`、`wrangler.toml`、`index.html` 等の設定・エントリ
