@@ -6,6 +6,7 @@ import {
     loadEnemyAssets,
     spawnEnemy,
 } from "./enemy.js";
+import { addGroundArea } from "./ground.js";
 
 export function registerGameScene() {
     loadSprite("bean", "sprites/bean.png");
@@ -110,16 +111,8 @@ export function registerGameScene() {
             }
         });
 
-
         // 地面エリア
-        add([
-            rect(width(), GROUND_HEIGHT),
-            pos(0, h - GROUND_HEIGHT),
-            outline(4),
-            area(),
-            body({ isStatic: true }),
-            color("#FF8322"),
-        ]);
+        addGroundArea({ w, h });
 
         // 仮のキャラクター
         const player = add([
