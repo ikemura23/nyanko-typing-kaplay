@@ -1,19 +1,15 @@
 import { BACKGROUND_COLOR } from "../common/backgroundColor.js";
+import { GROUND_HEIGHT } from "../common/groundHeight.js";
 import { computeRoundsToComplete } from "../common/roundsToComplete.js";
-
-// 敵の移動速度
-const ENEMY_SPEED = 80;
-// 地面の高さ
-const GROUND_HEIGHT = 56;
+import {
+    attachPlayerEnemyGameOver,
+    loadEnemyAssets,
+    spawnEnemy,
+} from "./enemy.js";
 
 export function registerGameScene() {
     loadSprite("bean", "sprites/bean.png");
-    loadCrew("sprite", "flowy");
-    loadCrew("sprite", "ghosty");
-    loadCrew("sprite", "gigagantrum");
-    loadCrew("sprite", "ghostiny");
-    loadCrew("sprite", "beantle");
-    loadCrew("sprite", "kaboom");
+    loadEnemyAssets();
 
     scene("game", ({ typingMode, typingModeId } = {}) => {
 
@@ -103,7 +99,7 @@ export function registerGameScene() {
                     }
                     // 現在の敵を倒して次の敵を出現
                     currentEnemy.destroy();
-                    currentEnemy = spawnEnemy();
+                    currentEnemy = spawnEnemy({ w, h });
                     // 次の単語へ
                     currentWordIndex = (currentWordIndex + 1) % wordList.length;
                     typedLength = 0;
@@ -134,35 +130,14 @@ export function registerGameScene() {
             body(),
         ]);
 
-        // 敵を1体生成する（1単語完了ごとに呼んで切り替え）
-        const enemySprites = ["flowy", "ghosty", "gigagantrum", "ghostiny", "beantle"];
-        function spawnEnemy() {
-            const spriteName = choose(enemySprites);
-            return add([
-                sprite(spriteName),
-                area(),
-                body({ isStatic: true }),
-                pos(w, h - GROUND_HEIGHT),
-                anchor("botleft"),
-                move(LEFT, ENEMY_SPEED),
-                "enemy",
-            ]);
-        }
-        let currentEnemy = spawnEnemy();
+        // 初回の敵を1体生成する
+        let currentEnemy = spawnEnemy({ w, h });
 
         // 敵と接触したら間に kaboom を表示し、1秒後に結果画面へ
-        player.onCollide("enemy", (enemy) => {
-            const midX = (player.pos.x + enemy.pos.x) / 2;
-            const midY = ((player.pos.y + enemy.pos.y) / 2) - 100;
-            const kaboomObj = add([
-                sprite("kaboom"),
-                pos(midX, midY),
-                anchor("center"),
-            ]);
-            wait(1, () => {
-                kaboomObj.destroy();
-                go("result", { typingScore, elapsedTime, typingMistakes });
-            });
-        });
+        attachPlayerEnemyGameOver(player, () => ({
+            typingScore,
+            elapsedTime,
+            typingMistakes,
+        }));
     });
 }
