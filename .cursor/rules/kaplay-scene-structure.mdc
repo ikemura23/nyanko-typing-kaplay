@@ -1,0 +1,44 @@
+---
+description: Kaplay の各シーンは scene.js を薄くし、UI・入力は同階層のモジュールに切り出す
+globs: src/**/scene.js
+alwaysApply: false
+---
+
+# Kaplay シーンの構成（scene の薄型化）
+
+## 方針
+
+- `**/scene.js` は **シーン登録とアセット読み込み** に寄せ、ゲームオブジェクトの組み立ては **同じディレクトリ内の別ファイル** に分ける。
+- Kaplay のグローバル API（`add`, `scene`, `go`, `onKeyPress` など）は各モジュールからそのまま使ってよい（`kaplay/global` 前提）。
+
+## ファイルの切り方
+
+| 種類 | 命名の目安 | 例 |
+|------|------------|-----|
+| 画面全体の背景 | `add{コンテキスト}Background` | `addGameBackground`, `addMenuBackground` |
+| 表示ブロック（タイトル・HUD・マスコットなど） | `add{役割}` | `addMenuTitle`, `addGameTimerHud` |
+| 選択 UI・キー入力など状態を伴う一式 | `setup{役割}` | `setupMenuTypingModePicker` |
+| シーン専用の定数・データのみ | 意味のあるファイル名 | `typingModes.js`（メニューのモード一覧） |
+
+- **再利用できる共通処理** は `src/common/` や既存の共有モジュールへ。シーン固有の見た目・レイアウトは **そのシーンのフォルダに置く**。
+- 新しいシーンを追加するときも、まず `registerXxxScene` と `scene("xxx", …)` の骨組みを作り、ブロックごとに `add*` / `setup*` に抜いていく。
+
+## 参照実装
+
+- `src/game/scene.js` — 背景・地面・プレイヤー・敵・タイマー・タイピングパネルをそれぞれ別モジュールから呼び出す形。
+- `src/menu/scene.js` — 背景・タイトル・マスコット・案内・モード選択を分割した形。
+
+## `scene.js` に残すものの例
+
+```js
+export function registerMenuScene() {
+  loadSprite(/* … */);
+  scene("menu", () => {
+    const w = width();
+    const h = height();
+    addMenuBackground({ w, h });
+    addMenuTitle({ w });
+    setupMenuTypingModePicker({ w, h });
+  });
+}
+```
