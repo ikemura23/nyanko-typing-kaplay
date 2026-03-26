@@ -1,4 +1,5 @@
 import { computeRoundsToComplete } from "../common/roundsToComplete.js";
+import { shuffleArray } from "../common/shuffleArray.js";
 import {
     attachPlayerEnemyGameOver,
     loadEnemyAssets,
@@ -26,7 +27,7 @@ export function registerGameScene() {
         const words = typingMode && typeof typingMode === "object"
             ? Object.values(typingMode).flatMap((g) => g.keys || [])
             : [];
-        const wordList = words.length > 0 ? words : [];
+        const wordList = words.length > 0 ? shuffleArray(words) : [];
         const gameCompleteEnemyCount = computeRoundsToComplete(wordList);
 
         let typingScore = 0;
@@ -46,6 +47,7 @@ export function registerGameScene() {
 
         onCharInput((ch) => {
             const targetWord = wordList[currentWordIndex];
+            if (!targetWord?.length) return;
             if (typedLength >= targetWord.length) return;
             if (ch.toUpperCase() === targetWord[typedLength]) {
                 typedLength += 1;
@@ -56,6 +58,8 @@ export function registerGameScene() {
                             typingScore,
                             elapsedTime: getElapsedTime(),
                             typingMistakes,
+                            typingMode,
+                            typingModeId,
                         });
                         return;
                     }
@@ -63,7 +67,7 @@ export function registerGameScene() {
                     currentEnemy = spawnEnemy({ w, h });
                     currentWordIndex = (currentWordIndex + 1) % wordList.length;
                     typedLength = 0;
-                    wordTextObj.text = wordList[currentWordIndex];
+                    wordTextObj.text = wordList[currentWordIndex] ?? "";
                 }
             } else {
                 typingMistakes += 1;
@@ -80,6 +84,8 @@ export function registerGameScene() {
             typingScore,
             elapsedTime: getElapsedTime(),
             typingMistakes,
+            typingMode,
+            typingModeId,
         }));
     });
 }

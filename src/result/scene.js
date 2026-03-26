@@ -5,7 +5,13 @@ import { addResultTitle } from "./resultTitle.js";
 import { setupResultNavigation } from "./setupResultNavigation.js";
 
 export function registerResultScene() {
-    scene("result", ({ typingScore = 0, elapsedTime = 0, typingMistakes = 0 } = {}) => {
+    scene("result", ({
+        typingScore = 0,
+        elapsedTime = 0,
+        typingMistakes = 0,
+        typingMode,
+        typingModeId,
+    } = {}) => {
         const w = width();
         const h = height();
 
@@ -13,6 +19,6 @@ export function registerResultScene() {
         addResultTitle({ w });
         addResultStats({ w, typingScore, elapsedTime, typingMistakes });
         addResultHints({ w, h });
-        setupResultNavigation();
+        setupResultNavigation({ typingMode, typingModeId });
     });
 }
