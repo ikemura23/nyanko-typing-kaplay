@@ -31,7 +31,7 @@ export function loadTypingFeedbackAssets() {
 /** 1 文字正解時の SE と軽いスケール・パネルシェイク */
 export function playTypingCorrectFeedback(wordTextObj, panelRoot) {
     play("bean_voice");
-    shakeTypingPanel(panelRoot, 4);
+    shakeTypingPanel(wordTextObj, 4);
     tween(
         1,
         SCALE_PEAK,
