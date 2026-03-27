@@ -9,11 +9,17 @@ import { addGameBackground } from "./gameBackground.js";
 import { addGameTimerHud } from "./gameTimerHud.js";
 import { addGroundArea } from "./ground.js";
 import { addPlayer, loadPlayerAssets } from "./player.js";
+import {
+    loadTypingFeedbackAssets,
+    playTypingCorrectFeedback,
+    playTypingWrongFeedback,
+} from "./typingFeedback.js";
 import { addTypingWordPanel } from "./typingWordPanel.js";
 
 export function registerGameScene() {
     loadPlayerAssets();
     loadEnemyAssets();
+    loadTypingFeedbackAssets();
 
     scene("game", ({ typingMode, typingModeId } = {}) => {
 
@@ -39,7 +45,7 @@ export function registerGameScene() {
         let wordsCompleted = 0;
         let typingMistakes = 0;
 
-        const { wordTextObj } = addTypingWordPanel({
+        const { wordTextObj, panelFrame, panelRoot } = addTypingWordPanel({
             w,
             word: wordList[currentWordIndex] ?? "",
             getTypedLength: () => typedLength,
@@ -50,6 +56,7 @@ export function registerGameScene() {
             if (!targetWord?.length) return;
             if (typedLength >= targetWord.length) return;
             if (ch.toUpperCase() === targetWord[typedLength]) {
+                playTypingCorrectFeedback(wordTextObj, panelRoot);
                 typedLength += 1;
                 if (typedLength === targetWord.length) {
                     wordsCompleted += 1;
@@ -70,6 +77,7 @@ export function registerGameScene() {
                     wordTextObj.text = wordList[currentWordIndex] ?? "";
                 }
             } else {
+                playTypingWrongFeedback(panelFrame, panelRoot);
                 typingMistakes += 1;
             }
         });
